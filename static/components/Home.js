@@ -1,0 +1,6 @@
+export default{
+    template:`
+    <h1>HELLO FROM HOME</h1>
+    
+    `
+}

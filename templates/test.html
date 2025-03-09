@@ -1,0 +1,18 @@
+
+    <div class="border mx-auto mt-5">
+        <div>
+            <h2 class="text-center">Login Form</h2>
+
+            <div class="mx-2 mb-3">
+                <label for="email" class="form-label">Email address</label>
+                <input type="email" class="form-control" id="email" v-model="formData.email">
+            </div>
+            <div class="mx-2 mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" v-model="formData.password">
+            </div>
+            <div class="mx-2 mb-3 text-center">
+                <button class="btn btn-primary" @click="loginUser">Login</button>
+            </div>
+        </div>
+    </div>
