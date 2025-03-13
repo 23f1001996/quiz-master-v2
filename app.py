@@ -1,7 +1,7 @@
 from flask import Flask
 from application.database import db
 from application.models import User,Role
-from application.resources import *
+from application.resources.__init__ import *
 from application.config import LocalDevelopmentConfig
 from flask_security import Security, SQLAlchemyUserDatastore
 from werkzeug.security import check_password_hash, generate_password_hash

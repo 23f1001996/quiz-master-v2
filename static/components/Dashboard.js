@@ -1,29 +1,44 @@
 export default {
     template: `
-    <h1>Hello user {{ userData.name || 'Loading...' }}</h1>
-
-    
+    <div>
+        <h1>Welcome, {{ userData?.name || "Loading..." }}</h1>
+        <p>Email: {{ userData?.email }}</p>
+        <p>Role: {{ userData?.role || "Loading..." }}</p>
+        <p>DOB: {{ userData?.dob || "Loading..." }}</p>
+        <p>Qualification: {{ userData?.qualification || "Loading..." }}</p>
+        <p>Skills: {{ userData?.skills || "Loading..." }}</p>
+    </div>
     `,
-    data() {
+    data:function(){
         return {
-            userData: {}
+            userData: null
         }
     },
-    mounted(){
+    mounted() {
         this.loadUser();
     },
-    
     methods: {
         loadUser() {
-            fetch('/api/home', {
+            fetch('/api/user', {
                 method: 'GET',
                 headers: {
                     "Content-Type": "application/json",
                     "Authentication-Token": localStorage.getItem("auth_token")
                 }
             })
-                .then(response => response.json())
-                .then(data => this.userData = data);
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Failed to load user data");
+                }
+                return response.json();
+            })
+            .then(data => {
+                this.$root.message = null;
+                this.userData = data;
+            })
+            .catch(error => {
+                console.error("Error fetching user data:", error);
+            });
         }
     }
-}
+};

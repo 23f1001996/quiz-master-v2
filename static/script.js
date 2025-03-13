@@ -7,6 +7,12 @@ import AlertMessage from './components/AlertMessage.js'
 import Register from './components/Register.js'
 import Dashboard from './components/Dashboard.js'
 import Admin from './components/Admin.js'
+import Logout from './components/Logout.js'
+import Subjects from './components/Subjects.js'
+import Chapters from './components/Chapters.js'
+import Quizzes from './components/Quizzes.js'
+import Questions from './components/Questions.js'
+
 
 const routes = [
     {path: '/', component: Home},
@@ -14,6 +20,13 @@ const routes = [
     {path: '/register', component: Register},
     {path: '/dashboard', component: Dashboard},
     {path: '/admin', component: Admin},
+    {path: '/logout', component: Logout},
+    {path: '/subjects', component: Subjects},
+    {path: '/Chapters/:subjectId', component: Chapters},
+    {path: '/Quizzes/:chapterId', component: Quizzes},
+    {path: '/Questions/:quizId', component: Questions},
+
+
 ]
 
 const router = new VueRouter({

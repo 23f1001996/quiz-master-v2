@@ -1,7 +1,6 @@
 export default {
     template: `
     <div class="container mt-5">
-        <h1 class="text-center">Hello Admin ♥</h1>
 
         <button class="btn btn-success btn-sm" @click="addSubject()">
             <i class="fas fa-plus"></i> Add Subject

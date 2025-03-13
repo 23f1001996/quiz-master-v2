@@ -1,9 +1,10 @@
 from flask import current_app as app, jsonify, request, render_template, send_from_directory
-from flask_security import auth_required,roles_required, roles_accepted, current_user,hash_password,login_user
+from flask_security import auth_required,roles_required, roles_accepted, current_user,hash_password,login_user,logout_user
 from application.database import db
 from application.models import User, Role, Subject, Chapter, Quiz, Question, UserQuiz
 
 from werkzeug.security import check_password_hash, generate_password_hash
+from datetime import datetime
 
 @app.route('/favicon.ico')
 def favicon():
@@ -13,17 +14,23 @@ def favicon():
 def index():
     return render_template('index.html')
 
-@app.route('/api/home')
+from flask import jsonify
+from flask_security import auth_required, current_user
+
+@app.route('/api/user', methods=['GET'])
 @auth_required('token')
-@roles_accepted('user', 'admin')#and
-# @roles_accepted(['user', 'admin']) #OR
-def user_home():
+@roles_accepted('user','admin')
+def get_user():
     user = current_user
     return jsonify({
         "name": user.name,
         "email": user.email,
-        "roles": user.roles[0].name
+        "role": user.roles[0].name,
+        "qualification": user.qualification,
+        "skills": user.skills,
+        "dob": user.dob
     })
+
 
 @app.route('/api/login', methods=['POST'])
 def user_login():
@@ -49,8 +56,17 @@ def user_login():
             return jsonify({'message': 'Invalid password'}), 400
     else:
         return jsonify({'message': 'User not found'}), 404
+
+@app.route('/api/logout', methods = ['POST'])
+@auth_required('token')
+def user_logout():
+    user = current_user
+    logout_user()
+    return jsonify({
+        "message": "User logged out"
+    })
     
-from datetime import datetime
+
 
 @app.route('/api/register', methods=['POST'])
 def create_user():

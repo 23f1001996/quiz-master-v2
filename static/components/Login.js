@@ -39,11 +39,14 @@ export default {
                 .then(data => {
                     console.log("Response from backend:", data);
 
-                    // Just set the message text, let AlertMessage.vue decide the color
-                    this.$root.message = data.message || "Invalid login credentials";
+                    this.$root.message = data.message;
 
                     // If login is successful, redirect
                     if (data.message.toLowerCase().includes("success")) {
+                        if (data["auth-token"]) {
+                            localStorage.setItem("auth_token", data["auth-token"]);
+                            localStorage.setItem("id", data.id);
+                        }
                         if (data.role === "admin") {
                             this.$router.push('/Admin');
                         } else {
