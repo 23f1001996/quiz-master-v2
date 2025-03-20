@@ -4,7 +4,7 @@ export default {
     <h1 class="text-center">Chapters of {{chapterData?.subject_name}} :</h1>
 
     <!-- Create Chapter Button -->
-    <button class="btn btn-success btn-sm mb-3" @click="addChapter()">
+    <button v-if="userData?.role === 'admin'" class="btn btn-success btn-sm mb-3" @click="addChapter()">
     <i class="fa fa-plus"></i> Add Chapter
     </button>
 
@@ -26,10 +26,10 @@ export default {
                     <td>{{ chapter.name }}</td>
                     <td>{{ chapter.description }}</td>
                     <td class="d-flex justify-content-center gap-1">
-                        <button class="btn btn-warning btn-sm px-2 shadow-sm" @click="editChapter(chapter)">
+                        <button v-if="userData?.role === 'admin'" class="btn btn-warning btn-sm px-2 shadow-sm" @click="editChapter(chapter)">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button class="btn btn-danger btn-sm px-2 shadow-sm" @click="confirmDelete(chapter.id)">
+                        <button v-if="userData?.role === 'admin'" class="btn btn-danger btn-sm px-2 shadow-sm" @click="confirmDelete(chapter.id)">
                             <i class="fas fa-trash"></i>
                         </button>
                         <button class="btn btn-primary btn-sm px-2 shadow-sm" @click="viewChapter(chapter.id)">

@@ -1,5 +1,5 @@
 from ..models import Chapter, Subject, Quiz
-from flask_security import auth_required, roles_required
+from flask_security import auth_required, roles_required, roles_accepted
 from flask_restful import Resource, reqparse
 from . import db
 
@@ -12,7 +12,7 @@ parser.add_argument('difficulty_level')
 class QuizApi(Resource):
     
     @auth_required('token')
-    @roles_required('admin')
+    @roles_accepted('admin','user')
     def get(self, chapter_id):
         if chapter_id:
             chapter = Chapter.query.get(chapter_id)
@@ -28,6 +28,7 @@ class QuizApi(Resource):
                     'max_score': quiz.max_score,
                     'passing_score': quiz.passing_score,
                     'difficulty_level': quiz.difficulty_level,
+                    'questions': len(quiz.questions),
                     'message': f'Showing chapters of: {chapter.name}'
                 })
                 

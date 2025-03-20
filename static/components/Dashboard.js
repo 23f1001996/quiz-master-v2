@@ -7,6 +7,9 @@ export default {
         <p>DOB: {{ userData?.dob || "Loading..." }}</p>
         <p>Qualification: {{ userData?.qualification || "Loading..." }}</p>
         <p>Skills: {{ userData?.skills || "Loading..." }}</p>
+        <router-link class="nav-link" to="/subjects">
+            <i class="fa-duotone fa-solid fa-chart-bar"></i> Subjects
+        </router-link>
     </div>
     `,
     data:function(){

@@ -1,5 +1,5 @@
 from ..models import Chapter, Subject
-from flask_security import auth_required, roles_required
+from flask_security import auth_required, roles_required,roles_accepted
 from flask_restful import Resource, reqparse
 from . import db
 
@@ -10,7 +10,7 @@ parser.add_argument('subject_id')
 
 class ChapterApi(Resource):
     @auth_required('token')
-    @roles_required('admin')
+    @roles_accepted('admin','user')
     def get(self, subject_id=None):
         if subject_id:
             subject = Subject.query.get(subject_id)

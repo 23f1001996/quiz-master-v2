@@ -5,6 +5,7 @@ from .subject_api import SubjectApi
 from .chapter_api import ChapterApi
 from .quiz_api import QuizApi
 from .question_api import QuestionApi
+from .scores_api import SubmitQuizApi, QuizResultApi
 
 api = Api()
 
@@ -31,4 +32,7 @@ api.add_resource(QuestionApi,
                  '/api/questions/delete/<int:question_id>'
                  )
 
+api.add_resource(SubmitQuizApi,
+                 '/api/submit_quiz/<int:quiz_id>')
 
+api.add_resource(QuizResultApi, "/api/quiz_result/<int:quiz_id>")
