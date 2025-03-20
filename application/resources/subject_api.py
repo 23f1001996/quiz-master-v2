@@ -1,5 +1,5 @@
 from ..models import *
-from flask_security import auth_required, roles_required, current_user
+from flask_security import auth_required, roles_required, roles_accepted
 from flask_restful import Resource, reqparse
 
 parser = reqparse.RequestParser()
@@ -10,7 +10,7 @@ parser.add_argument('description')
         
 class SubjectApi(Resource):
     @auth_required('token')
-    @roles_required('admin')
+    @roles_accepted('admin','user')
     def get(self):
         subjects = Subject.query.all()
         subjects_json = []

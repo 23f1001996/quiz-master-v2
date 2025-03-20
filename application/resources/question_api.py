@@ -1,5 +1,5 @@
 from ..models import Quiz,Question
-from flask_security import auth_required, roles_required
+from flask_security import auth_required, roles_required, roles_accepted
 from flask_restful import Resource, reqparse
 from . import db
 
@@ -14,7 +14,7 @@ parser.add_argument('correct_option')
 class QuestionApi(Resource):
     
     @auth_required('token')
-    @roles_required('admin')
+    @roles_accepted('admin','user')
     def get(self, quiz_id):
         if quiz_id:
             quiz = Quiz.query.get(quiz_id)
@@ -34,7 +34,13 @@ class QuestionApi(Resource):
                 })
                 
             if questions_json:
-                return questions_json
+                return {
+                    "quiz": {
+                    "id": quiz.id,
+                    "time_duration": quiz.time_duration  # Ensure this is in "hh:mm" format
+        },
+        "questions": questions_json
+                }
             return {'message':'No questions found'}
         
     

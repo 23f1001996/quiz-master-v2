@@ -206,7 +206,7 @@ export default {
                 .then(response => response.json())
                 .then(data => {
                     this.$root.message = data.message;
-                    this.questions = data;
+                    this.questions = data.questions;
                 })
         },
 

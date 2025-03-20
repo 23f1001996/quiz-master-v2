@@ -2,7 +2,7 @@ export default {
     template: `
     <div class="container mt-5">
 
-        <button class="btn btn-success btn-sm" @click="addSubject()">
+        <button v-if="userData?.role === 'admin'" class="btn btn-success btn-sm" @click="addSubject()">
             <i class="fas fa-plus"></i> Add Subject
         </button>
 
@@ -42,10 +42,10 @@ export default {
                     <p class="card-text text-muted flex-grow-1">{{ subject.description }}</p>
 
                     <div class="mt-auto d-flex justify-content-between">
-                        <button class="btn btn-warning btn-sm shadow-sm px-3" @click="editSubject(subject)">
+                        <button v-if="userData?.role === 'admin'" class="btn btn-warning btn-sm shadow-sm px-3" @click="editSubject(subject)">
                             <i class="fas fa-edit"></i> Edit
                         </button>
-                        <button class="btn btn-danger btn-sm shadow-sm px-3" @click="confirmDelete(subject.id)">
+                        <button v-if="userData?.role === 'admin'" class="btn btn-danger btn-sm shadow-sm px-3" @click="confirmDelete(subject.id)">
                             <i class="fas fa-trash"></i> Delete
                         </button>
                         <button class="btn btn-primary btn-sm shadow-sm px-3" @click="viewSubject(subject.id)">

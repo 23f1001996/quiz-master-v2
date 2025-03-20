@@ -96,3 +96,5 @@ def create_user():
     db.session.commit()
 
     return jsonify({"message": "User created successfully!"}), 201
+
+

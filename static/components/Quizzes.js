@@ -2,7 +2,7 @@ export default {
     template: `
     <div class="container mt-5">
 
-        <button class="btn btn-success btn-sm" @click="addQuiz()">
+        <button v-if="userData?.role === 'admin'" class="btn btn-success btn-sm" @click="addQuiz()">
         <i class="fa fa-plus"></i> Add Quiz
         </button>
 
@@ -64,14 +64,20 @@ export default {
                             </td>
 
                             <td class="d-flex justify-content-around">
-                                <button class="btn btn-warning btn-sm" @click="editQuiz(quiz)">
+                                <button v-if="userData?.role === 'admin'" class="btn btn-warning btn-sm" @click="editQuiz(quiz)">
                                 <i class="fas fa-edit"></i>
                                 </button>
-                                <button class="btn btn-danger btn-sm" @click="confirmDelete(quiz.id)">
+                                <button v-if="userData?.role === 'admin'" class="btn btn-danger btn-sm" @click="confirmDelete(quiz.id)">
                                 <i class="fas fa-trash"></i>
                                 </button>
-                                <button class="btn btn-primary btn-sm" @click="viewQuiz(quiz.id)">
+                                <button v-if="userData?.role === 'admin'" class="btn btn-primary btn-sm" @click="viewQuiz(quiz.id)">
                                 <i class="fas fa-eye"></i>
+                                </button>
+                                <button v-if="userData?.role === 'user' && quiz.questions != 0" class="btn btn-primary btn-sm" @click="attemptQuiz(quiz.id)">
+                                <i class="fas fa-check"></i> Attempt quiz
+                                </button>
+                                <div v-else class="text-danger">
+                                <i class="fa-regular fa-clock"></i>   No questions added yet
                                 </button>
                             </td>
                         </tr>
@@ -250,6 +256,9 @@ export default {
             this.$router.push(`/questions/${quizId}`);
         },
 
+        attemptQuiz(quizId){
+            this.$router.push(`/attempt/${quizId}`);
+        },
         /** Cancel editing */
         cancelEdit() {
             this.editingQuiz = null;

@@ -1,6 +1,6 @@
 export default {
     template: `
-    <nav class="navbar navbar-expand-lg bg-body-tertiary w-100">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top w-100">
         <div class="container-fluid">
             <router-link class="navbar-brand d-flex align-items-center" to="/">
                 <i class="fas fa-home me-2"></i> Home
@@ -21,6 +21,9 @@ export default {
                     <i class="fa-solid fa-chart-line"></i> Dashboard
                     </router-link>
                     <router-link v-if="userData?.role === 'admin'" class="nav-link" to="/subjects">
+                    <i class="fa-duotone fa-solid fa-chart-bar"></i> Subjects
+                    </router-link>
+                    <router-link v-if="userData?.role === 'user'" class="nav-link" to="/subjects">
                     <i class="fa-duotone fa-solid fa-chart-bar"></i> Subjects
                     </router-link>
                     <router-link v-if="userData" class="nav-link text-danger" to="/logout">

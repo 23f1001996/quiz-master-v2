@@ -1,7 +1,7 @@
 export default {
     props: ['message'],
     template: `
-    <div v-if="message" class="alert" :class="alertClass">
+    <div v-if="message" class="alert sticky-top" :class="alertClass">
         {{ message }}
         <button type="button" class="btn-close float-end" @click="clearMessage"></button>
     </div>
