@@ -14,6 +14,7 @@ import Quizzes from './components/Quizzes.js'
 import Questions from './components/Questions.js'
 import AttemptQuiz from './components/AttemptQuiz.js'
 import QuizResult from './components/QuizResult.js'
+import Scores from './components/Scores.js'
 
 
 const routes = [
@@ -29,6 +30,7 @@ const routes = [
     {path: '/Questions/:quizId', component: Questions},
     {path: '/attempt/:quizId', component: AttemptQuiz},
     {path: '/result/:quizId', component: QuizResult},
+    {path: '/scores', component: Scores},
 ]
 
 const router = new VueRouter({

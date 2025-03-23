@@ -1,11 +1,42 @@
 from flask import request, jsonify
-from flask_security import auth_required, current_user
+from flask_security import auth_required, current_user, roles_required, roles_accepted
 from flask_restful import Resource
-from ..models import Quiz, Question, UserQuiz, db
+from ..models import IST, Quiz, Question, UserQuiz, db, Chapter, Subject
 
-class SubmitQuizApi(Resource):
+class ScoresApi(Resource):
+    
+    @auth_required('token')
+    @roles_accepted('user','admin')
+    def get(self):
+        user = current_user
+        scores = UserQuiz.query.filter_by(user_id = user.id).all()
+        
+        if not scores:
+            return jsonify({'message': 'No scores found'}), 404
+        
+        scores_json = []
+        for score in scores:
+            quiz = Quiz.query.get( score.quiz_id)
+            chapter = Chapter.query.get(quiz.chapter_id)
+            subject = Subject.query.get(chapter.subject_id)
+            scores_json.append({
+                'score': score.score,
+                'quiz': quiz.id,
+                'chapter_name': chapter.name,
+                'subject_name': subject.name,
+                'timestamp': score.timestamp.astimezone(IST).isoformat()
+                })
+            
+        if scores_json:
+            return {
+                'scores': scores_json,
+                'message': f'Showing scores of {user.name}'
+            },200
+        
+        return {'message': 'Attempt quizzes to view score'}
 
     @auth_required('token')
+    @roles_required('user')
     def post(self, quiz_id):
         try:
             data = request.get_json()
@@ -43,6 +74,7 @@ class SubmitQuizApi(Resource):
 class QuizResultApi(Resource):
 
     @auth_required('token')
+    @roles_required('user')
     def get(self, quiz_id):
         """
         Fetch quiz results for a user.

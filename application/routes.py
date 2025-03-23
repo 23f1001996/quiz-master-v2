@@ -6,6 +6,9 @@ from application.models import User, Role, Subject, Chapter, Quiz, Question, Use
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
 
+from celery.result import AsyncResult
+from .tasks import csv_report
+
 @app.route('/favicon.ico')
 def favicon():
     return send_from_directory('static', 'favicon.ico', mimetype='image/vnd.microsoft.icon')
@@ -97,4 +100,16 @@ def create_user():
 
     return jsonify({"message": "User created successfully!"}), 201
 
+@app.route('/api/export') # this manually triggers the job
+def export_csv():
+    result = csv_report.delay(current_user.id) # async object
+    return jsonify({
+        "id": result.id,
+        "result": result.result,
 
+    })
+
+@app.route('/api/csv_result/<id>') # just create to test the status of result
+def csv_result(id):
+    res = AsyncResult(id)
+    return send_from_directory('static', res.result)

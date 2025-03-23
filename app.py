@@ -5,6 +5,7 @@ from application.resources.__init__ import *
 from application.config import LocalDevelopmentConfig
 from flask_security import Security, SQLAlchemyUserDatastore
 from werkzeug.security import check_password_hash, generate_password_hash
+from application.celery_init import celery_init_app
 
 
 def create_app():
@@ -19,6 +20,7 @@ def create_app():
     return app
 
 app = create_app()
+celery = celery_init_app(app)
 
 with app.app_context():
     db.create_all()
