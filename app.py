@@ -1,5 +1,5 @@
 from flask import Flask
-from application.database import db
+from application.database import db,cache
 from application.models import User,Role
 from application.resources.__init__ import *
 from application.config import LocalDevelopmentConfig
@@ -7,8 +7,8 @@ from flask_security import Security, SQLAlchemyUserDatastore
 from werkzeug.security import check_password_hash, generate_password_hash
 from application.celery_init import celery_init_app
 from celery.schedules import crontab
-
 from application.tasks import monthly_report
+
 
 def create_app():
     app = Flask(__name__)
@@ -18,6 +18,7 @@ def create_app():
     api.init_app(app)
     datastore = SQLAlchemyUserDatastore(db,User,Role)
     app.security = Security(app,datastore)
+    cache.init_app(app)
     app.app_context().push()
     return app
 

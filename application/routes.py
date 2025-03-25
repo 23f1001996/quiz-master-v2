@@ -1,13 +1,15 @@
 from flask import current_app as app, jsonify, request, render_template, send_from_directory
 from flask_security import auth_required,roles_required, roles_accepted, current_user,hash_password,login_user,logout_user
-from application.database import db
-from application.models import User, Role, Subject, Chapter, Quiz, Question, UserQuiz
+from application.database import db, cache
+from application.models import User, Role, Subject, Chapter, Quiz, Question
 
 from werkzeug.security import check_password_hash, generate_password_hash
-from datetime import datetime
+from datetime import datetime 
 
 from celery.result import AsyncResult
 from .tasks import csv_report
+
+cache.set("test_key", "Hello, Redis!")
 
 @app.route('/favicon.ico')
 def favicon():
@@ -21,6 +23,7 @@ from flask import jsonify
 from flask_security import auth_required, current_user
 
 @app.route('/api/user', methods=['GET'])
+@cache.cached(timeout=300, key_prefix='user_data')
 @auth_required('token')
 @roles_accepted('user','admin')
 def get_user():
