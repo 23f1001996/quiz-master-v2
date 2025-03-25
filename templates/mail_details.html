@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monthly Quiz Activity Report</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container">
+        <div class="row mt-3 text-center">
+            <img src="https://cdn-icons-png.flaticon.com/512/1828/1828884.png" alt="Quiz Logo" class="mx-auto" style="width: 150px;">
+        </div>
+        <div class="row">
+            <h1 class="text-center mt-3">Monthly Quiz Activity Report</h1>
+            <p class="fs-4">Hello, <strong>{{ data['username'] }}</strong>!</p>
+            <p class="fs-5">Here’s your quiz activity report for this month.</p>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <p class="fs-5"><strong>Total Quizzes Taken:</strong> {{ data['total_quizzes'] }}</p>
+            </div>
+            <div class="col-md-6">
+                <p class="fs-5"><strong>Average Score:</strong> {{ data['average_score'] }}</p>
+            </div>
+        </div>
+
+        <div class="row">
+            <table class="table table-striped mt-3">
+                <thead>
+                    <tr>
+                        <th scope="col">Sr No</th>
+                        <th scope="col">Quiz Name</th>
+                        <th scope="col">Score</th>
+                        <th scope="col">Attempted At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for quiz in data['quizzes'] %}
+                    <tr>
+                        <th scope="row">{{ loop.index }}</th>
+                        <td>{{ quiz['quiz_name'] }}</td>
+                        <td>{{ quiz['score'] }}</td>
+                        <td>{{ quiz['timestamp'] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>  
+            </table>
+        </div>
+
+        <div class="row">
+            <p class="fs-5 text-center">
+                Keep up the great work and continue improving your skills! 🚀
+            </p>
+        </div>
+
+        <div class="row">
+            <p class="text-center mt-3">
+                Quiz Master | &copy; 2025 | Created by Shrauz
+            </p>
+        </div>
+    </div>
+</body>
+</html>

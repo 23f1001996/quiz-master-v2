@@ -1,6 +1,6 @@
 export default {
     template: `
-    <div v-if="questions.length > 0" class="container mt-4">
+    <div class="container mt-4">
     <h2 class="text-center mb-4">Quiz Questions</h2>
 
     <!-- Create question modal -->
@@ -107,7 +107,7 @@ export default {
 
     <!-- The cards -->
     <div class="row">
-        <div v-for="question in questions" :key="question.id" class="col-12 mb-3">
+        <div v-if="questions?.length > 0"  v-for="question in questions" :key="question.id" class="col-12 mb-3">
             <div class="card shadow-sm p-3">
                 <div class="card-body">
                     <h5 class="card-title">

@@ -2,6 +2,7 @@ from ..models import Chapter, Subject, Quiz
 from flask_security import auth_required, roles_required, roles_accepted
 from flask_restful import Resource, reqparse
 from . import db
+from ..tasks import quiz_update
 
 parser = reqparse.RequestParser()
 parser.add_argument('time_duration')
@@ -50,6 +51,7 @@ class QuizApi(Resource):
             quiz = Quiz(chapter_id=chapter_id, time_duration=args['time_duration'], max_score=args['max_score'],passing_score=args['passing_score'],difficulty_level=args['difficulty_level'])
             db.session.add(quiz)
             db.session.commit()
+            result = quiz_update.delay(chapter.name)
             return {'message': 'Quiz created successfully!'}, 201
         except Exception as e:
             db.session.rollback()
