@@ -35,28 +35,30 @@ export default {
 
         <!-- Quizzes List -->
         <div v-if="quizzes?.length > 0" class="mb-5">
-            <div class="table-responsive mt-5">
-                <table class="table table-bordered table-striped">
-                    <thead class="table-warning text-center">
-                        <tr>
-                            <th>#</th>
-                            <th>Duration</th>
-                            <th>Difficulty Level</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(quiz, index) in quizzes" :key="quiz.id">
-                            <td class="text-center">Quiz {{ index + 1 }}</td>
-                            <td class="text-center">{{ quiz.time_duration }}</td>
-                            <td class="text-center">
-                                <span v-if="quiz.difficulty_level === 'easy'" class="text-success">Easy</span>
-                                <span v-else-if="quiz.difficulty_level === 'medium'" class="text-warning">Medium</span>
-                                <span v-else class="text-danger">Hard</span>
-                            </td>
-
-                            <td>
-                            <div class="d-flex justify-content-around align-items-center gap-2">
+    <div class="table-responsive mt-5">
+        <table class="table table-bordered table-striped">
+            <thead class="table-warning text-center">
+                <tr>
+                    <th>#</th>
+                    <th>Duration</th>
+                    <th>Difficulty Level</th>
+                    <th style="width: 200px;">Actions</th> <!-- Reduced Width -->
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(quiz, index) in quizzes" :key="quiz.id">
+                    <td class="text-center">Quiz {{ index + 1 }}</td>
+                    <td class="text-center">{{ quiz.time_duration }}</td>
+                    <td class="text-center">
+                        <span v-if="quiz.difficulty_level === 'easy'" class="text-success">Easy</span>
+                        <span v-else-if="quiz.difficulty_level === 'medium'" class="text-warning">Medium</span>
+                        <span v-else class="text-danger">Hard</span>
+                    </td>
+                    <td style="width: 400px;"> <!-- Reduced Width -->
+                        <div class="d-flex justify-content-between align-items-center">
+                            
+                            <!-- Buttons Container -->
+                            <div style="width: 140px;" class="d-flex align-items-center gap-3">
                                 <!-- Admin Buttons -->
                                 <button v-if="userData?.role === 'admin'" class="btn btn-warning btn-sm" @click="editQuiz(quiz)">
                                     <i class="fas fa-edit"></i>
@@ -67,54 +69,29 @@ export default {
                                 <button v-if="userData?.role === 'admin'" class="btn btn-primary btn-sm" @click="viewQuiz(quiz.id)">
                                     <i class="fas fa-eye"></i>
                                 </button>
-
-                                <!-- User Button / Message -->
-                                <div v-if="userData?.role === 'user'">
-                                    <button v-if="quiz.questions > 0" class="btn btn-primary btn-sm" @click="attemptQuiz(quiz.id)">
-                                        <i class="fas fa-check"></i> Attempt quiz
-                                    </button>
-                                    <span v-else class="text-danger">
-                                        <i class="fa-regular fa-clock"></i> No questions added yet
-                                    </span>
-                                </div>
+                                <button v-if="userData?.role === 'user' && quiz.questions > 0" class="btn btn-primary btn-sm" @click="attemptQuiz(quiz.id)">
+                                    <i class="fas fa-check"></i> Attempt Quiz
+                                </button>
                             </div>
-                        </td>
+                    
+                            <!-- Text Container -->
+                            <div class="mx-3">
+                                <p v-if="quiz.questions === 0" class="text-danger mb-0 text-truncate">
+                                    <i class="fa-regular fa-clock"></i> No questions added yet
+                                </p>
+                            </div>
+                    
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div v-else class="alert alert-warning text-center m-5 d-inline-block text-truncate" style="max-width: 400px;">
+    No Quizzes added yet.
+</div>
 
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div v-else class="alert alert-warning text-center m-5">
-            No Quizzes added yet.
-        </div>
-
-        <!-- Edit Quiz Modal -->
-        <div v-if="editingQuiz !== null" class="modal d-block">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Edit Quiz</h5>
-                        <button type="button" class="btn-close" @click="cancelEdit"></button>
-                    </div>
-                    <div class="modal-body">
-                        <label>Duration:</label>
-                        <input type="text" class="form-control" v-model="quizData.time_duration">
-                        
-                        <label>Difficulty Level:</label>
-                        <select class="form-select" v-model="quizData.difficulty_level">
-                            <option value="easy">Easy</option>
-                            <option value="medium">Medium</option>
-                            <option value="hard">Hard</option>
-                        </select>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-secondary" @click="cancelEdit">Cancel</button>
-                        <button class="btn btn-success" @click="updateQuiz">Update</button>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <!-- Delete Confirmation Modal -->
         <div v-if="deletingQuiz !== null" class="modal d-block">

@@ -64,10 +64,8 @@ export default {
             })
             .then(response => response.json())
             .then(data => {
-                this.$root.message = data.message
-                if (response.ok) {
+                this.$root.message = data.message;
                     this.$router.push('/login');  // Redirect only if registration is successful
-                }
             })
 
         }
