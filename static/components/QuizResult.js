@@ -28,6 +28,10 @@ export default {
                     </div>
                 </div>
             </div>
+        
+            <router-link class="btn btn-success" to="/scores">
+                        <i class="fa-regular fa-star"></i> View all scores
+                    </router-link>
         </div>
     </div>`,
 

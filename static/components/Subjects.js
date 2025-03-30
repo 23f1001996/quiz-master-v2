@@ -6,6 +6,13 @@ export default {
             <i class="fas fa-plus"></i> Add Subject
         </button>
 
+        <div class="input-group m-4">
+            <input type="text" v-model="searchQuery" class="form-control" placeholder="Search subjects by name..." @input="searchSubjects">
+            <button class="btn btn-primary" @click="searchSubjects">
+                <i class="fa fa-search"></i>
+            </button>
+        </div>
+
         <!-- Create Subject Modal -->
         <div v-if="creatingSubject" class="modal d-block">
             <div class="modal-dialog">
@@ -30,33 +37,37 @@ export default {
 
         <!-- Subjects List -->
         <div v-if="subjects.length > 0" class="mb-5">
-    <h2 class="text-center mb-4">Subjects:</h2>
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        <div class="col" v-for="subject in subjects" :key="subject.id">
-            <div class="card shadow-lg border rounded-4 h-100" 
-                 style="min-height: 380px;">
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title text-dark fw-bold">
-                        <i class="fas fa-book text-primary"></i> {{ subject.name }}
-                    </h5>
-                    <p class="card-text text-muted flex-grow-1">{{ subject.description }}</p>
+            <h2 class="text-center mb-4">Subjects:</h2>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                <div class="col" v-for="subject in filteredSubjects" :key="subject.id">
+                    <div class="card shadow-lg border rounded-4 h-100" 
+                        style="min-height: 250px;">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title text-dark fw-bold">
+                                <i class="fas fa-book text-primary"></i> {{ subject.name }}
+                            </h5>
+                            <p class="card-text text-muted flex-grow-1">{{ subject.description }}</p>
 
-                    <div class="mt-auto d-flex justify-content-between">
-                        <button v-if="userData?.role === 'admin'" class="btn btn-warning btn-sm shadow-sm px-3" @click="editSubject(subject)">
-                            <i class="fas fa-edit"></i> Edit
-                        </button>
-                        <button v-if="userData?.role === 'admin'" class="btn btn-danger btn-sm shadow-sm px-3" @click="confirmDelete(subject.id)">
-                            <i class="fas fa-trash"></i> Delete
-                        </button>
-                        <button class="btn btn-primary btn-sm shadow-sm px-3" @click="viewSubject(subject.id)">
-                            <i class="fas fa-eye"></i> View
-                        </button>
+                            <div class="mt-auto d-flex justify-content-between">
+                                <button v-if="userData?.role === 'admin'" class="btn btn-warning btn-sm shadow-sm px-3" @click="editSubject(subject)">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button v-if="userData?.role === 'admin'" class="btn btn-danger btn-sm shadow-sm px-3" @click="confirmDelete(subject.id)">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                                <button class="btn btn-primary btn-sm shadow-sm px-3" @click="viewSubject(subject.id)">
+                                    <i class="fas fa-eye"></i> View
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
+        <div v-else class="alert alert-warning text-center m-5">
+            No Subjects added yet.
+        </div>
+
 
 
         <!-- Edit Subject Modal -->
@@ -109,7 +120,9 @@ export default {
             subjectData: { name: '', description: '' },
             editingSubject: null,
             creatingSubject: false,
-            deletingSubject: null
+            deletingSubject: null,
+            filteredSubjects: [],
+            searchQuery: ""
         };
     },
 
@@ -145,6 +158,7 @@ export default {
             .then(response => response.json())
             .then(data => { 
                 this.subjects = data;
+                this.filteredSubjects = data;
                 this.$root.message = data.message;
              })
             .catch(error => { console.error("Error loading subjects:", error); });
@@ -166,6 +180,12 @@ export default {
                 this.loadSubjects();
                 this.cancelEdit();  // Properly close modal
             });
+        },
+        searchSubjects() {
+            const query = this.searchQuery.toLowerCase();
+            this.filteredSubjects = this.subjects.filter(subject => 
+                subject.name.toLowerCase().includes(query)
+            );
         },
 
         /** Prepare subject for editing */

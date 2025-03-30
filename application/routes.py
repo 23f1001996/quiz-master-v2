@@ -23,7 +23,7 @@ from flask import jsonify
 from flask_security import auth_required, current_user
 
 @app.route('/api/user', methods=['GET'])
-@cache.cached(timeout=300, key_prefix='user_data')
+# @cache.cached(timeout=300, key_prefix='user_data')
 @auth_required('token')
 @roles_accepted('user','admin')
 def get_user():
@@ -116,3 +116,52 @@ def export_csv():
 def csv_result(id):
     res = AsyncResult(id)
     return send_from_directory('static', res.result)
+
+
+@app.route('/api/toggle_active/<int:user_id>', methods=['POST'])
+@auth_required('token')
+def toggle_active(user_id):
+    # Fetch the user from the database
+    user = User.query.get(user_id)
+    
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    # Toggle the user's active status
+    user.active = not user.active
+    db.session.commit()
+    
+    # Prepare a message indicating the new status
+    status = "activated" if user.active else "deactivated"
+    
+    return jsonify({
+        "message": f"User {user_id} has been successfully {status}.",
+        "active": user.active  # Send the new status to update the frontend correctly
+    }), 200
+
+
+
+@app.route('/api/users', methods = ["GET"])
+@auth_required('token')
+@roles_required('admin')
+def get_users():
+    users = User.query.all()
+    user_json = []
+    for user in users:
+        user_json.append({
+            "id": user.id,
+            "name": user.name,
+            "email": user.email,
+            "role": user.roles[0].name,
+            "qualification": user.qualification,
+            "skills": user.skills,
+            "dob": user.dob,
+            "active" : user.active
+        })
+        
+    if user_json:
+        return jsonify(user_json)
+    
+    return jsonify({
+        "message": "Users not found"
+    })

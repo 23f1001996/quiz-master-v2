@@ -1,6 +1,7 @@
 export default {
     template: `
     <div class="container mt-5">
+    <h1 class="text-center">Quizzes of {{quizData.chapter_name}} :</h1>
 
         <button v-if="userData?.role === 'admin'" class="btn btn-success btn-sm" @click="addQuiz()">
         <i class="fa fa-plus"></i> Add Quiz
@@ -17,10 +18,6 @@ export default {
                     <div class="modal-body">
                         <label>Duration:</label>
                         <input type="text" class="form-control" v-model="quizData.time_duration">
-                        <label>Max Score:</label>
-                        <input type="number" class="form-control" v-model="quizData.max_score">
-                        <label>Passing Score:</label>
-                        <input type="number" class="form-control" v-model="quizData.passing_score">
                         <label>Difficulty Level:</label>
                         <select class="form-select" v-model="quizData.difficulty_level">
                             <option value="easy">Easy</option>
@@ -37,16 +34,13 @@ export default {
         </div>
 
         <!-- Quizzes List -->
-        <div v-if="quizzes.length > 0" class="mb-5">
-            <h2 class="text-center m-3">Quizzes of {{ quizData?.chapter_name}} :</h2>
-            <div class="table-responsive">
+        <div v-if="quizzes?.length > 0" class="mb-5">
+            <div class="table-responsive mt-5">
                 <table class="table table-bordered table-striped">
                     <thead class="table-warning text-center">
                         <tr>
                             <th>#</th>
                             <th>Duration</th>
-                            <th>Max Score</th>
-                            <th>Passing Score</th>
                             <th>Difficulty Level</th>
                             <th>Actions</th>
                         </tr>
@@ -55,35 +49,44 @@ export default {
                         <tr v-for="(quiz, index) in quizzes" :key="quiz.id">
                             <td class="text-center">Quiz {{ index + 1 }}</td>
                             <td class="text-center">{{ quiz.time_duration }}</td>
-                            <td class="text-center">{{ quiz.max_score }}</td>
-                            <td class="text-center">{{ quiz.passing_score }}</td>
                             <td class="text-center">
                                 <span v-if="quiz.difficulty_level === 'easy'" class="text-success">Easy</span>
                                 <span v-else-if="quiz.difficulty_level === 'medium'" class="text-warning">Medium</span>
                                 <span v-else class="text-danger">Hard</span>
                             </td>
 
-                            <td class="d-flex justify-content-around">
+                            <td>
+                            <div class="d-flex justify-content-around align-items-center gap-2">
+                                <!-- Admin Buttons -->
                                 <button v-if="userData?.role === 'admin'" class="btn btn-warning btn-sm" @click="editQuiz(quiz)">
-                                <i class="fas fa-edit"></i>
+                                    <i class="fas fa-edit"></i>
                                 </button>
                                 <button v-if="userData?.role === 'admin'" class="btn btn-danger btn-sm" @click="confirmDelete(quiz.id)">
-                                <i class="fas fa-trash"></i>
+                                    <i class="fas fa-trash"></i>
                                 </button>
                                 <button v-if="userData?.role === 'admin'" class="btn btn-primary btn-sm" @click="viewQuiz(quiz.id)">
-                                <i class="fas fa-eye"></i>
+                                    <i class="fas fa-eye"></i>
                                 </button>
-                                <button v-if="userData?.role === 'user' && quiz.questions != 0" class="btn btn-primary btn-sm" @click="attemptQuiz(quiz.id)">
-                                <i class="fas fa-check"></i> Attempt quiz
-                                </button>
-                                <div v-else class="text-danger">
-                                <i class="fa-regular fa-clock"></i>   No questions added yet
-                                </button>
-                            </td>
+
+                                <!-- User Button / Message -->
+                                <div v-if="userData?.role === 'user'">
+                                    <button v-if="quiz.questions > 0" class="btn btn-primary btn-sm" @click="attemptQuiz(quiz.id)">
+                                        <i class="fas fa-check"></i> Attempt quiz
+                                    </button>
+                                    <span v-else class="text-danger">
+                                        <i class="fa-regular fa-clock"></i> No questions added yet
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+
                         </tr>
                     </tbody>
                 </table>
             </div>
+        </div>
+        <div v-else class="alert alert-warning text-center m-5">
+            No Quizzes added yet.
         </div>
 
         <!-- Edit Quiz Modal -->
@@ -97,10 +100,7 @@ export default {
                     <div class="modal-body">
                         <label>Duration:</label>
                         <input type="text" class="form-control" v-model="quizData.time_duration">
-                        <label>Max Score:</label>
-                        <input type="number" class="form-control" v-model="quizData.max_score">
-                        <label>Passing Score:</label>
-                        <input type="number" class="form-control" v-model="quizData.passing_score">
+                        
                         <label>Difficulty Level:</label>
                         <select class="form-select" v-model="quizData.difficulty_level">
                             <option value="easy">Easy</option>
@@ -141,7 +141,7 @@ export default {
         return {
             userData: null,
             quizzes: [],
-            quizData: {time_duration: '', max_score: '', passing_score: '', difficulty_level: '', chapterId: '' },
+            quizData: {time_duration: '', difficulty_level: '',chapterId: '', chapter_name: ''},
             editingQuiz: null,
             creatingQuiz: false,
             deletingQuiz: null
@@ -212,8 +212,6 @@ export default {
             this.creatingQuiz = true;
             this.quizData = {
                 time_duration: '',
-                max_score: '',
-                passing_score: '',
                 difficulty_level: ''
             };
         },
@@ -265,8 +263,6 @@ export default {
             this.creatingQuiz = false;
             this.quizData = {
                 time_duration: '',
-                max_score: '',
-                passing_score: '',
                 difficulty_level: ''
             };
             

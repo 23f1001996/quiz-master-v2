@@ -35,7 +35,7 @@ with app.app_context():
         app.security.datastore.create_user(email = "admin@gmail.com",
                                  password = generate_password_hash("1234"),
                                  roles = ['admin'],
-                                 name="Admin", qualification="None",
+                                 name="Admin", qualification="None",skills="None",
                                  dob=datetime.strptime("2000-01-01", "%Y-%m-%d").date())
     
     db.session.commit()

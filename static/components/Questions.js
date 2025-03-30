@@ -236,6 +236,7 @@ export default {
                 .then(data => {
                     this.$root.message = data.message;
                     this.loadQuestions();
+                    this.cancelEdit();s
                 });
         },
 

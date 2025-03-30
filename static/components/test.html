@@ -1,0 +1,31 @@
+<div v-if = "users?.length>0">
+    <h2 class=""text-center>List of Users :</h2>
+    <div class="table table-bordered table-striped">
+        <thead class="table-warning text-center">
+            <tr>
+                <th>#id</th>
+                <th>Name</th>
+                <th>E-mail</th>
+                <th>Role</th>
+                <th>Qualification</th>
+                <th>Skills</th>
+                <th>DOB</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="user in users" :key="user.email">
+                <td>{{ user.name }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.role }}</td>
+                <td>{{ user.qualification }}</td>
+                <td>{{ user.skills }}</td>
+                <td>{{ new Date(user.dob).toLocaleDateString('en-GB') }}</td>
+                <td :class="{'text-success': user.active, 'text-danger': !user.active}">
+                    {{ user.active ? 'Active' : 'Inactive' }}
+                </td>
+            </tr>
+        </tbody>
+    </div>
+    <div v-else class="alert alert-warning text-center">No users found.</div>
+</div>

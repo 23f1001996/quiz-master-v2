@@ -26,8 +26,6 @@ class QuizApi(Resource):
                     'id': quiz.id,
                     'chapter_id': quiz.chapter_id,
                     'time_duration': quiz.time_duration,
-                    'max_score': quiz.max_score,
-                    'passing_score': quiz.passing_score,
                     'difficulty_level': quiz.difficulty_level,
                     'questions': len(quiz.questions),
                     'message': f'Showing chapters of: {chapter.name}'
@@ -37,7 +35,7 @@ class QuizApi(Resource):
                 return {
                     'quizzes': quizzes_json,
                     'chapter_name': chapter.name
-                        }
+                    }
             return {'message': 'No quizzes found'}
         
     @auth_required('token')
@@ -48,7 +46,7 @@ class QuizApi(Resource):
         if not chapter:
             return {'message': 'Chapter not found'}, 404
         try:
-            quiz = Quiz(chapter_id=chapter_id, time_duration=args['time_duration'], max_score=args['max_score'],passing_score=args['passing_score'],difficulty_level=args['difficulty_level'])
+            quiz = Quiz(chapter_id=chapter_id, time_duration=args['time_duration'],difficulty_level=args['difficulty_level'])
             db.session.add(quiz)
             db.session.commit()
             result = quiz_update.delay(chapter.name)

@@ -26,6 +26,9 @@ export default {
                     <router-link v-if="userData?.role === 'user'" class="nav-link" to="/subjects">
                     <i class="fa-duotone fa-solid fa-chart-bar"></i> Subjects
                     </router-link>
+                    <router-link v-if="userData?.role === 'user'" class="nav-link" to="/scores">
+                    <i class="fa-regular fa-star"></i> Scores
+                    </router-link>
                     <router-link v-if="userData" class="nav-link text-danger" to="/logout">
                         <i class="fas fa-sign-out-alt me-2"></i> Logout
                     </router-link>

@@ -1,3 +1,4 @@
+
 from flask import request, jsonify
 from flask_security import auth_required, current_user, roles_required, roles_accepted
 from flask_restful import Resource
@@ -24,14 +25,15 @@ class ScoresApi(Resource):
                 'quiz': quiz.id,
                 'chapter_name': chapter.name,
                 'subject_name': subject.name,
-                'timestamp': score.timestamp.astimezone(IST).isoformat()
+                'timestamp': score.timestamp.strftime('%Y-%m-%d %H:%M:%S')
                 })
+            
             
         if scores_json:
             return {
                 'scores': scores_json,
                 'message': f'Showing scores of {user.name}'
-            },200
+            }
         
         return {'message': 'Attempt quizzes to view score'}
 

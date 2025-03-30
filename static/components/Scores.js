@@ -21,7 +21,7 @@ export default {
         <!-- Quiz Scores Table -->
         <div v-else-if="scores.length > 0">
             <table class="table table-bordered table-striped">
-                <thead class="table-dark">
+                <thead class="table-info">
                     <tr>
                         <th>Quiz ID</th>
                         <th>Chapter</th>
@@ -98,8 +98,10 @@ export default {
         },
 
         formatTimestamp(timestamp) {
-            return new Date(timestamp).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
+            const date = new Date(timestamp);  // This will correctly parse the timezone (+05:30)
+            return date.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
         },
+                
         csvExport(){
             fetch('/api/export')
             .then(response => response.json())

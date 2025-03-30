@@ -9,38 +9,41 @@ export default {
     </button>
 
     <!-- Chapters Table -->
-    <div v-if="chapters.length > 0" class="d-flex justify-content-center">
-    <div class="table-responsive w-75 mx-auto">
-        <table class="table table-bordered table-striped shadow-sm rounded">
-            <thead class="table-info text-center">
-                <tr>
-                    <th style="width: 5%;">#</th>
-                    <th style="width: 35%;">Name</th>
-                    <th style="width: 45%;">Description</th>
-                    <th style="width: 15%;">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(chapter, index) in chapters" :key="chapter.id">
-                    <td class="text-center fw-bold">{{ index + 1 }}</td>
-                    <td>{{ chapter.name }}</td>
-                    <td>{{ chapter.description }}</td>
-                    <td class="d-flex justify-content-center gap-1">
-                        <button v-if="userData?.role === 'admin'" class="btn btn-warning btn-sm px-2 shadow-sm" @click="editChapter(chapter)">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button v-if="userData?.role === 'admin'" class="btn btn-danger btn-sm px-2 shadow-sm" @click="confirmDelete(chapter.id)">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                        <button class="btn btn-primary btn-sm px-2 shadow-sm" @click="viewChapter(chapter.id)">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+    <div v-if="chapters?.length > 0" class="d-flex justify-content-center">
+        <div class="table-responsive w-75 mx-auto">
+            <table class="table table-bordered table-striped shadow-sm rounded">
+                <thead class="table-info text-center">
+                    <tr>
+                        <th style="width: 5%;">#</th>
+                        <th style="width: 35%;">Name</th>
+                        <th style="width: 45%;">Description</th>
+                        <th style="width: 15%;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(chapter, index) in chapters" :key="chapter.id">
+                        <td class="text-center fw-bold">{{ index + 1 }}</td>
+                        <td>{{ chapter.name }}</td>
+                        <td>{{ chapter.description }}</td>
+                        <td class="d-flex justify-content-center gap-1">
+                            <button v-if="userData?.role === 'admin'" class="btn btn-warning btn-sm px-2 shadow-sm" @click="editChapter(chapter)">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button v-if="userData?.role === 'admin'" class="btn btn-danger btn-sm px-2 shadow-sm" @click="confirmDelete(chapter.id)">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                            <button class="btn btn-primary btn-sm px-2 shadow-sm" @click="viewChapter(chapter.id)">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
+    <div v-else class="alert alert-warning text-center m-5">
+            No Chapters added yet.
+        </div>
 
     <!-- Create Chapter Modal -->
     <div v-if="creatingChapter" class="modal d-block">
@@ -112,7 +115,7 @@ export default {
         return {
             userData: null,
             chapters: [],
-            chapterData: { name: '', description: '', subjectId: ''},
+            chapterData: { name: '', description: '', subjectId: '', subject_name: ''},
             editingChapter: null,
             creatingChapter: false,
             deletingChapter: null

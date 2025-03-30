@@ -56,8 +56,8 @@ class Quiz(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     chapter_id = db.Column(db.Integer, db.ForeignKey("chapter.id"), nullable = False)
     time_duration = db.Column(db.String(5), nullable=False)
-    max_score = db.Column(db.Integer, nullable=False, default=100)
-    passing_score = db.Column(db.Integer, nullable=False, default=40)
+    # max_score = db.Column(db.Integer, nullable=False, default=100)
+    # passing_score = db.Column(db.Integer, nullable=False, default=40)
     difficulty_level = db.Column(db.String(20), default="Medium")
     questions = db.relationship('Question', backref='quiz', cascade="all, delete", lazy=True)
     
@@ -74,9 +74,10 @@ class Question(db.Model):
     
 class UserQuiz(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    quiz_id = db.Column(db.Integer, db.ForeignKey('quiz.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)
+    quiz_id = db.Column(db.Integer, db.ForeignKey('quiz.id', ondelete='CASCADE'), nullable=False)
     timestamp = db.Column(db.DateTime, default=ist_time)
     score = db.Column(db.Integer, nullable=False)
 
-    quiz = db.relationship('Quiz', backref='attempts')
+    quiz = db.relationship('Quiz', backref=db.backref('attempts', cascade='all, delete-orphan'))
+
